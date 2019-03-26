@@ -3,8 +3,8 @@ var topics = ["Black Panther", "Guardians of the Galaxy", "Iron Man", "Ragnarok"
 function renderButtons() {
     for (var i = 0; i < topics.length; i++) {
         var newButton = $("<button>");
-        newButton.addClass("Btn");
-        newButton.addClass("marvel-button");
+        newButton.addClass("btn marvel-button");
+        // newButton.addClass("marvel-button");
         newButton.text(topics[i]);
         $("#button-container").append(newButton);
         console.log(newButton);
@@ -26,7 +26,7 @@ function addButton(show) {
         topics.push(show);
         $("#button-container").empty();
         renderButtons();
-        console.log(topics)
+        // console.log(topics)
     }
 }
 
@@ -36,30 +36,31 @@ function populateGIFContainer(show) {
         method: "GET"
 
     }).then(function (response) {
+        console.log(response)
         response.data.forEach(function (element) {
             newDiv = $("<div>");
             newDiv.addClass("individual-gif-container");
-            // newDiv.append("<p>Rating: " + element.rating.ToUpperCase() + "</p>");
+            newDiv.append("<p>Rating: " + element.rating.toUpperCase() + "</p>");
             var newImage = $("<img src = '" + element.images.fixed_height_still.url + "'>");
             newImage.addClass("gif-image");
-            newImage.attr("state", "still");
-            newImage.attr("still-data", element.images.fixed_height_still.url);
-            newImage.attr("animated-data", element.images.fixed_height.url);
+            newImage.attr("data-state", "still");
+            newImage.attr("data-still", element.images.fixed_height_still.url);
+            newImage.attr("data-animated", element.images.fixed_height.url);
             newDiv.append(newImage);
-            $("#gif-container").append(newDiv);
+            $("#gif-container").prepend(newDiv);
         });
 
         $("#gif-container").addClass("dotted-border");
-        $(".gif-image").unbind("click");
-        $(".gif-image").on("click", function () {
-            if ($(this).attr("state") === "still") {
-                $(this).attr("state", "animated");
-                $(this).attr("src", (this).attr("animated-data"));
+        // $(".gif-image").unbind("click");
+        $(document).on("click", ".gif-image", function () {
+            if ($(this).attr("data-state") === "still") {
+                $(this).attr("data-state", "animated");
+                $(this).attr("src", $(this).attr("data-animated"));
 
             }
             else {
-                $(this).attr("state", "still");
-                $(this).attr("src", $(this).attr("still-data"));
+                $(this).attr("data-state", "still");
+                $(this).attr("src", $(this).attr("data-still"));
             }
 
         });
